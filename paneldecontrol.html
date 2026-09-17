@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Operativo</title>
+    <!-- fuentes de google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CyberNet</h1>
+        <div>
+            <a href="admin.html" style="color: #ffd900; margin-right: 15px;">Vista Administrador</a>
+            <a href="index.html" style="color: red;">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <br>
+    
+    <main>
+        
+        <h2>Panel Operativo</h2>
+        <hr>
+
+        <!-- Resumen de los equipos Disponibles y sesiones activas -->
+        <div>
+            <h3>Equipos Disponibles: <span style="color: green;">11</span></h3>
+            <h3>Sesiones Activas: <span style="color: rgb(24, 47, 175);">10</span></h3>
+            <h3>Total Recaudado Hoy: $<span id="total-recaudado">0</span></h3>
+        </div>
+
+        <br>
+
+        <h3>Estado de Computadores en Sala</h3>
+        
+        
+        <div class="contenedor-cajas">
+            
+            <div class="caja-pc">
+                <h4>PC 01 (General)</h4>
+                <p>Cliente: -</p>
+                <p>Tiempo: -</p>
+                <p>Estado: <span class="texto-verde">Libre</span></p>
+                <button onclick="iniciar(this)">Iniciar</button>
+            </div>
+
+
+            <div class="caja-pc fondo-cafe" data-minutos="45">
+                <h4>PC 02 (Estudio)</h4>
+                <p>Cliente: rlNaiko</p>
+                <p>Tiempo: 45 min</p>
+                <p>Estado: Ocupado</p>
+                <button onclick="cobrar(this)">Cobrar</button>
+            </div>
+
+            <div class="caja-pc fondo-cafe" data-minutos="75">
+                <h4>PC 03 (Estudio)</h4>
+                <p>Cliente: Dmk</p>
+                <p>Tiempo: 1 hora 15 min</p>
+                <p>Estado: Ocupado</p>
+                <button onclick="cobrar(this)">Cobrar</button>
+            </div>
+
+            <div class="caja-pc fondo-cafe" data-minutos="120">
+                <h4>PC 04 (Estudio)</h4>
+                <p>Cliente: Piru</p>
+                <p>Tiempo: 2 horas</p>
+                <p>Estado: Ocupado</p>
+                <button onclick="cobrar(this)">Cobrar</button>
+            </div>
+
+            <div class="caja-pc fondo-cafe" data-minutos="15">
+                <h4>PC 05 (Estudio)</h4>
+                <p>Cliente: Drella</p>
+                <p>Tiempo: 15 min</p>
+                <p>Estado: Ocupado</p>
+                <button onclick="cobrar(this)">Cobrar</button>
+            </div>
+
+        </div>
+
+        <br><br>
+        <!-- historial clientes -->
+        <h3 style="border-bottom: 1px solid black;">Historial de Sesiones Finalizadas</h3>
+        <table border="1" style="width: 100%; text-align: left; background-color: white; border-collapse: collapse;">
+            <thead style="background-color: #1a1a1a; color: white;">
+                <tr>
+                    <th style="padding: 10px;">Cliente</th>
+                    <th style="padding: 10px;">Computador</th>
+                    <th style="padding: 10px;">Tiempo</th>
+                    <th style="padding: 10px;">Servicios Extra</th>
+                    <th style="padding: 10px;">Total Cobrado</th>
+                </tr>
+            </thead>
+            <!-- JS con el id identifica el hisptorial para agregarlo -->
+            <tbody id="cuerpo-historial">
+            </tbody>
+        </table>
+
+    </main>
+
+    <footer>
+        <p>2026 CyberNet.</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

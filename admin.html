@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración | CyberNet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>CyberNet - ADMINISTRACIÓN</h1>
+        <div>
+            <!-- Enlace para volver a la vista del encargado -->
+            <a href="paneldecontrol.html" style="color: rgb(255, 255, 255); margin-right: 15px;">Ir a Panel Operativo</a>
+            <a href="index.html" style="color: red;">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <br>
+    
+    <main>
+        <h2>Configuración Global del Sistema</h2>
+        <hr>
+
+        <div class="contenedor-cajas">
+            
+            <!-- Configurar Tarifas -->
+            <div class="caja-pc">
+                <h4>Configurar Tarifas</h4>
+                <p>Precio actual x Hora:</p>
+                <input type="number" value="1200" style="width: 100%; padding: 5px;">
+                <button>Actualizar Precio</button>
+            </div>
+
+            <!-- Gestión de Equipos -->
+            <div class="caja-pc">
+                <h4>Gestión de Equipos</h4>
+                <p>Total equipos: 5</p>
+                <p>Activos: 4 | Desactivados: 1</p>
+                <button>+ Agregar Computador</button>
+                <button style="margin-top: 5px; background-color: #503923; color: white;">Desactivar Equipo</button>
+            </div>
+
+            <!-- Gestión de Encargados -->
+            <div class="caja-pc">
+                <h4>Cuentas de Encargados</h4>
+                <p>Usuarios activos: 3</p>
+                <p>Último ingreso: rlNaiko</p>
+                <button>Crear Nuevo Encargado</button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <br><br>
+    <footer>
+        <p>2026 CyberNet - Vista de Administrador.</p>
+    </footer>
+
+</body>
+</html>

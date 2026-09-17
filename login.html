@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <!--Nombre de la pagina-->
+    <title>CyberNet - Login</title>
+    <!--Pagina adaptable al dispositivo-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Texto resumen de la pagina-->
+    <meta name="description" content="Descripción del CyberCafé">
+    <!--Evita duplicación-->
+    <link rel="canonical" href="index.html">
+    <!--Coneta el HTML con el CSS que se hará-->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    
+    <main class="contenedor-login">
+
+        <div class="login-imagen">
+            <img src="img/Logo.jpg" alt="logo CyberNet" width="300">
+        </div>
+
+        <section class="login-formulario">
+            <h2>Acceso Personal</h2>
+            <p>Ingresa tus datos de encargado</p>
+            
+            <form action="paneldecontrol.html" method="GET">
+                <div class="grupo-input">
+                    <label for="usuario">Usuario:</label>
+                    <input type="texto" id="usuario" name="usuario" placeholder="Ej: Maximiliano Gonzalez" required>
+                    
+                </div>
+                
+                <div class="grupo-input">
+                    <label for="Contraseña">Contraseña:</label>
+                    <input type="Contraseña" id="Contraseña" name="Contraseña" placeholder="********" required>
+                </div>
+                <br>
+                <button type="submit" class="btn-ingresar">Iniciar Sesión</button>
+            </form>
+            
+            <br>
+            <a href="index.html" class="link-volver"> Inicio</a>
+        </section>
+    </main>
+
+</body>
+</html>
+
