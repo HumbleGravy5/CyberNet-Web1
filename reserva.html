@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberNet - Reserva de Cliente</title>
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 1. Primero cargamos tu archivo de lógica externo -->
+    <script src="reserva.js"></script>
+
+    <!-- 2. Luego cargamos Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body x-data="panelReserva()">
+
+    <header>
+        <h1>CyberNet</h1>
+        <div>
+            <span style="color: white; margin-right: 15px;">
+                Bienvenido, <strong style="color: #ffd900;" x-text="usuario.nombre"></strong>
+            </span>
+            <a href="login.html" style="color: red;" @click.prevent="cerrarSesion()">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <br>
+
+    <div x-data="{ mostrarAyuda: false }" style="margin-bottom: 20px; text-align: center;">
+    <button @click="mostrarAyuda = !mostrarAyuda" style="padding: 10px; background-color: #503923; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Instrucciones de Reserva
+    </button>
+    <div x-show="mostrarAyuda" style="margin-top: 10px; padding: 15px; background-color: white; border: 1px solid #ccc; border-radius: 5px; display: none;">
+        <p>Busca el equipo que necesites por ID o categoría. Solo puedes reservar equipos en estado "disponible" que no superen tu saldo actual.</p>
+    </div>
+</div>
+
+    <main>
+        <h2>Reserva de Equipos</h2>
+        <hr>
+
+        <div>
+            <h3>Tu Saldo Disponible: $<span style="color: green;" x-text="usuario.saldo"></span></h3>
+        </div>
+
+        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #ccc; max-width: 450px; margin: 15px 0;">
+            <h4 style="margin-top: 0;">Recargar Saldo</h4>
+
+            <form @submit.prevent="procesarRecarga()" novalidate>
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; font-weight: bold;">Monto a recargar ($):</label>
+                    <input
+                        type="number"
+                        x-model.number="formRecarga.monto"
+                        placeholder="Ej: 5000 (Mínimo $1000)"
+                        style="width: 100%; padding: 8px; box-sizing: border-box;"
+                    >
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label style="display: block; font-weight: bold;">Método de Pago:</label>
+                    <select x-model="formRecarga.metodo" style="width: 100%; padding: 8px; box-sizing: border-box;">
+                        <option value="">-- Selecciona un método --</option>
+                        <option value="Débito / Redcompra">Débito / Redcompra</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Efectivo en Caja">Efectivo en Caja</option>
+                    </select>
+                </div>
+
+                <button type="submit" style="padding: 8px 15px; cursor: pointer;">Recargar Ahora</button>
+            </form>
+
+            <!-- Mensaje claro ante envío válido o datos inválidos -->
+            <p x-show="formRecarga.mensaje !== ''"
+                x-text="formRecarga.mensaje"
+                :style="formRecarga.esError ? 'color: #b00020; background: #ffebee; padding: 8px; border-radius: 4px; font-weight: bold;' : 'color: #1b5e20; background: #e8f5e9; padding: 8px; border-radius: 4px; font-weight: bold;'">
+            </p>
+        </div>
+
+        <br>
+
+        <h3>Equipos Disponibles para Reserva</h3>
+
+        <!-- Buscador con x-model -->
+        <div style="margin-bottom: 20px;">
+            <input
+                type="text"
+                x-model="busqueda"
+                placeholder="Buscar por ID (Ej: PC-01), Categoría (Ej: Office) o Estado..."
+                style="padding: 10px; width: 100%; max-width: 400px; border-radius: 5px; border: 1px solid #ccc; font-size: 16px;"
+            >
+        </div>
+
+        <p x-show="cargando" style="color: gray; font-style: italic;">
+            Cargando computadores...
+        </p>
+
+        <!-- Mensaje error si falla el JSON -->
+        <div x-show="mensajeError !== ''" style="background-color: #ffdddd; color: #a00; padding: 15px; border: 1px solid #a00; border-radius: 5px; margin-bottom: 20px;">
+            <strong>Error detectado:</strong> <span x-text="mensajeError"></span>
+        </div>
+
+        <!-- Listado dinámico x-for con :key -->
+        <div class="contenedor-cajas" x-show="!cargando && mensajeError === ''">
+
+            <template x-for="pc in equiposFiltrados" :key="pc.id_equipo">
+
+                <div class="caja-pc" :class="{ 'fondo-cafe': pc.estado !== 'disponible' }">
+                    <h4 x-text="pc.id_equipo"></h4>
+
+                    <p>Categoría: <strong x-text="pc.tipo"></strong></p>
+                    <p>Valor Hora: $<span x-text="pc.precio"></span></p>
+
+                    <p style="font-size: 0.9em; color: #444;" x-show="pc.especificaciones">
+                        Specs:
+                        <span x-text="pc.especificaciones?.cpu"></span> |
+                        <span x-text="pc.especificaciones?.ram"></span> |
+                        <span x-text="pc.especificaciones?.gpu"></span>
+                    </p>
+
+                    <p>Estado:
+                        <span x-text="pc.estado"
+                                :class="{ 'texto-verde': pc.estado === 'disponible' }"
+                                style="text-transform: capitalize; font-weight: bold;">
+                        </span>
+                    </p>
+
+                    <button
+                        @click="reservar(pc)"
+                        :disabled="pc.estado !== 'disponible'"
+                        :style="pc.estado !== 'disponible' ? 'background-color: grey; cursor: not-allowed;' : ''"
+                        x-text="pc.estado === 'disponible' ? 'Reservar' : (pc.estado === 'mantenimiento' ? 'Mantenimiento' : 'Ocupado')">
+                    </button>
+                </div>
+
+            </template>
+
+            <div x-show="equiposFiltrados.length === 0 && !cargando" style="color: red; grid-column: 1 / -1; padding: 20px 0;">
+                No se encontraron equipos que coincidan con tu búsqueda.
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>2026 CyberNet.</p>
+    </footer>
+
+</body>
+</html>

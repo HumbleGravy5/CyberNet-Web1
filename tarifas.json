@@ -1,0 +1,42 @@
+{
+  "tarifas":
+    [
+      {
+        "id_tarifa": "T01",
+        "descripcion": "Hora Office",
+        "precio": 5000,
+        "moneda": "CLP",
+        "minutos": 60
+      },
+      {
+        "id_tarifa": "T02",
+        "descripcion": "Hora CloudePro",
+        "precio": 7000,
+        "moneda": "CLP",
+        "minutos": 60
+      },
+      {
+        "id_tarifa": "T03",
+        "descripcion": "Zona Estudio + PC",
+        "precio": 10000,
+        "moneda": "CLP",
+        "minutos": 60
+      },
+      {
+        "id_tarifa": "T04",
+        "descripcion": "Impresión por página (B/N)",
+        "precio": 100,
+        "moneda": "CLP",
+        "minutos": 0
+      },
+      {
+        "id_tarifa": "T05",
+        "descripcion": "Impresión por página (Color)",
+        "precio": 300,
+        "moneda": "CLP",
+        "minutos": 0
+      }
+    ]
+
+
+}

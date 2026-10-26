@@ -1,0 +1,49 @@
+{
+    "usuario":{
+        "users":[
+        {
+            "id_user": "ADMIN_00",
+            "username": "Drella",
+            "password": "sambuka",
+            "rol": "administrador",
+            "nombre": "Daniel Aedo Guerra"
+        },
+        {
+            "id_user": "ADMIN_01",
+            "username": "Masi",
+            "password": "obiteamo",
+            "rol": "administrador",
+            "nombre": "Maximiliano Gonzalez Torres"
+        },
+        {
+            "id_user": "CLIENT_00",
+            "username": "Teo",
+            "password": "1234",
+            "rol": "gato",
+            "nombre": "Gato Persa"
+        },
+        {
+            "id_user": "CLIENT_01",
+            "username": "Fede",
+            "password": "lapension",
+            "rol": "cliente",
+            "nombre": "Fedelobo"
+        },
+        {
+            "id_user": "ADMIN_03",
+            "username": "admin",
+            "password": "1234",
+            "rol": "administrador",
+            "nombre": "ADMIN"
+        },
+        {
+            "id_user": "CLIENT_02",
+            "username": "user",
+            "password": "1234",
+            "rol": "cliente",
+            "nombre": "cliente501"
+        }
+        ]
+    }
+
+}

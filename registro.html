@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CyberNet - Registro de Usuario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Cabecera simple para no perderse -->
+    <main class="contenedor-login">
+
+        <div class="login-card">
+            <div class="login-header">
+                <img src="img/Logo.jpg" alt="logo CyberNet">
+            </div>
+
+            <section class="login-formulario">
+                <h2>Crear Cuenta Nueva</h2>
+                <p>Únete a CyberNet para acumular horas</p>
+
+                <!-- Simulamos que al registrarse lo manda al login -->
+                <form action="login.html" method="GET" onsubmit="alert('¡Registro exitoso! Ahora puedes iniciar sesión.');">
+
+                    <div class="grupo-input">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="correo">Correo Electrónico:</label>
+                        <input type="email" id="correo" name="correo" placeholder="correo@ejemplo.com" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="nuevo-password">Contraseña:</label>
+                        <input type="password" id="nuevo-password" name="nuevo-password" placeholder="Crea una contraseña" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label for="repetir-password">Repetir Contraseña:</label>
+                        <input type="password" id="repetir-password" name="repetir-password" placeholder="Repite la contraseña" required>
+                    </div>
+
+                    <br>
+                    <button type="submit" class="btn-primario">Registrarse</button>
+                </form>
+
+                <br>
+                <p>¿Ya tienes cuenta? <a href="login.html" style="color: #503923; font-weight: bold;">Inicia Sesión aquí</a></p>
+                <br>
+                <a href="index.html" class="link-volver"> Inicio</a>
+            </section>
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -3,61 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración | CyberNet</title>
+    <title>CyberNet - Panel de Administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="admin.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
+
+<body x-data="panelAdmin()">
 
     <header>
-        <h1>CyberNet - ADMINISTRACIÓN</h1>
+        <h1>CyberNet - Administración</h1>
         <div>
-            <!-- Enlace para volver a la vista del encargado -->
-            <a href="paneldecontrol.html" style="color: rgb(255, 255, 255); margin-right: 15px;">Ir a Panel Operativo</a>
-            <a href="index.html" style="color: red;">Cerrar Sesión</a>
+            <a href="paneldecontrol.html" style="color: #ffd900; margin-right: 15px;">Volver al Panel Operativo</a>
+            <a href="index.html" style="color: red;" @click="cerrarSesion()">Cerrar Sesión</a>
         </div>
     </header>
 
     <br>
-    
+
     <main>
-        <h2>Configuración Global del Sistema</h2>
+        <h2>Configuración del Sistema</h2>
         <hr>
 
-        <div class="contenedor-cajas">
-            
-            <!-- Configurar Tarifas -->
-            <div class="caja-pc">
-                <h4>Configurar Tarifas</h4>
-                <p>Precio actual x Hora:</p>
-                <input type="number" value="1200" style="width: 100%; padding: 5px;">
-                <button>Actualizar Precio</button>
-            </div>
+        <p x-show="cargando" style="color: gray; font-style: italic;">Cargando datos de tarifas.json y servicios.json...</p>
+        <p x-show="mensajeError !== ''" x-text="mensajeError" style="color: red; font-weight: bold;"></p>
 
-            <!-- Gestión de Equipos -->
-            <div class="caja-pc">
-                <h4>Gestión de Equipos</h4>
-                <p>Total equipos: 5</p>
-                <p>Activos: 4 | Desactivados: 1</p>
-                <button>+ Agregar Computador</button>
-                <button style="margin-top: 5px; background-color: #503923; color: white;">Desactivar Equipo</button>
-            </div>
 
-            <!-- Gestión de Encargados -->
-            <div class="caja-pc">
-                <h4>Cuentas de Encargados</h4>
-                <p>Usuarios activos: 3</p>
-                <p>Último ingreso: rlNaiko</p>
-                <button>Crear Nuevo Encargado</button>
-            </div>
+        <section x-show="!cargando">
+            <h3>1. Modificar Valor de las Tarifas</h3>
 
-        </div>
+            <!-- Formulario interactivo con @submit.prevent y x-model -->
+            <form @submit.prevent="guardarTarifas()" style="background: white; padding: 20px; border: 1px solid #ccc; border-radius: 8px; max-width: 600px;" novalidate>
+
+                <template x-for="(item, index) in tarifas" :key="index">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                        <div>
+                            <!-- Mostramos el ID y la Descripción -->
+                            <span style="background: #1a1a1a; color: #ffd900; padding: 2px 6px; border-radius: 4px; font-size: 0.8em; margin-right: 6px;"
+                                    x-text="item.id_tarifa"></span>
+                            <strong style="font-size: 1.1em;" x-text="item.descripcion"></strong>
+
+                            <!-- Detalle de moneda y duración -->
+                            <span style="color: gray; font-size: 0.85em; display: block; margin-top: 4px;"
+                                    x-text="item.minutos > 0 ? `Duración base: ${item.minutos} min (${item.moneda})` : `Cobro unitario (${item.moneda})`">
+                            </span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <span>$</span>
+                            <input
+                                type="number"
+                                x-model.number="item.precio"
+                                min="50"
+                                step="50"
+                                style="padding: 8px; width: 120px; font-weight: bold; font-size: 16px;"
+                                required
+                            >
+                        </div>
+                    </div>
+                </template>
+
+                <button type="submit" style="margin-top: 10px; padding: 10px 20px; cursor: pointer;">
+                    Guardar Nuevas Tarifas
+                </button>
+
+                <!-- Mensaje claro ante envío válido o datos inválidos -->
+                <p x-show="mensajeTarifa !== ''"
+                    x-text="mensajeTarifa"
+                    :style="errorTarifa ? 'color: #b00020; background: #ffebee; padding: 10px; border-radius: 4px; font-weight: bold; margin-top: 12px;' : 'color: #1b5e20; background: #e8f5e9; padding: 10px; border-radius: 4px; font-weight: bold; margin-top: 12px;'">
+                </p>
+            </form>
+        </section>
+
+        <br><hr><br>
+
+
+        <section x-show="!cargando">
+            <h3>2. Control de Mantenimiento de Equipos</h3>
+            <p>Cambia el estado de los equipos en <strong>mantenimiento</strong> a <strong>disponible</strong>.</p>
+
+            <div class="contenedor-cajas">
+                <template x-for="pc in equipos" :key="pc.id_equipo">
+
+                    <div class="caja-pc" :class="{ 'fondo-cafe': pc.estado === 'mantenimiento' }">
+                        <h4 x-text="pc.id_equipo"></h4>
+                        <p>Categoría: <strong x-text="pc.tipo"></strong></p>
+                        <p>Valor Hora: $<span x-text="pc.precio"></span></p>
+
+                        <p>Estado:
+                            <span :class="{ 'texto-verde': pc.estado === 'disponible' }"
+                                    style="text-transform: capitalize; font-weight: bold;"
+                                    x-text="pc.estado">
+                            </span>
+                        </p>
+
+                        <!-- Botón para pasar de Mantenimiento-Disponible -->
+                        <button
+                            x-show="pc.estado === 'mantenimiento'"
+                            @click="cambiarEstadoMantenimiento(pc)"
+                            style="background-color: #2e7d32; color: white; cursor: pointer;">
+                            Pasar a Disponible
+                        </button>
+
+                        <!-- Botón para pasar de Disponible-Mantenimiento -->
+                        <button
+                            x-show="pc.estado === 'disponible'"
+                            @click="cambiarEstadoMantenimiento(pc)"
+                            style="background-color: #c62828; color: white; cursor: pointer;">
+                            Enviar a Mantenimiento
+                        </button>
+
+                        <button
+                            x-show="pc.estado === 'ocupado'"
+                            disabled
+                            style="background-color: grey; cursor: not-allowed;">
+                            Ocupado
+                        </button>
+                    </div>
+
+                </template>
+            </div>
+        </section>
 
     </main>
 
-    <br><br>
+    <br>
     <footer>
-        <p>2026 CyberNet - Vista de Administrador.</p>
+        <p>2026 CyberNet.</p>
     </footer>
 
 </body>

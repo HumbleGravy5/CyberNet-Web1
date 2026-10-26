@@ -1,0 +1,95 @@
+{
+  "equipos":
+      [
+        {
+          "id_equipo": "PC-01",
+          "tipo": "CloudePro",
+          "estado": "disponible",
+          "precio": 7000,
+          "especificaciones": {
+            "cpu": "Intel Core i7",
+            "ram": "16GB",
+            "gpu": "RTX 4060"
+          }
+        },
+        {
+          "id_equipo": "PC-02",
+          "tipo": "CloudePro",
+          "estado": "disponible",
+          "precio": 7000,
+          "especificaciones": {
+            "cpu": "Intel Core i3",
+            "ram": "8GB",
+            "gpu": "Integrada"
+          }
+        },
+        {
+          "id_equipo": "PC-03",
+          "tipo": "CloudePro",
+          "estado": "mantenimiento",
+          "precio": 7000,
+          "especificaciones": {
+            "cpu": "AMD Ryzen 5",
+            "ram": "16GB",
+            "gpu": "RTX 3060"
+          }
+        },
+        {
+          "id_equipo": "PC-04",
+          "tipo": "Office",
+          "estado": "disponible",
+          "precio": 5000,
+          "especificaciones": {
+            "cpu": "Intel Core i3",
+            "ram": "8GB",
+            "gpu": "Integrada"
+          }
+        },
+        {
+          "id_equipo": "PC-05",
+          "tipo": "Office",
+          "estado": "disponible",
+          "precio": 5000,
+          "especificaciones": {
+            "cpu": "Intel Core i3",
+            "ram": "8GB",
+            "gpu": "Integrada"
+          }
+        },
+        {
+          "id_equipo": "PC-06",
+          "tipo": "Office",
+          "estado": "disponible",
+          "precio": 5000,
+          "especificaciones": {
+            "cpu": "Intel Core i3",
+            "ram": "8GB",
+            "gpu": "Integrada"
+          }
+        },
+        {
+          "id_equipo": "PC-07",
+          "tipo": "Office",
+          "estado": "disponible",
+          "precio": 5000,
+          "especificaciones": {
+            "cpu": "Intel Core i3",
+            "ram": "8GB",
+            "gpu": "Integrada"
+          }
+        },
+        {
+          "id_equipo": "PC-08",
+          "tipo": "Office",
+          "estado": "disponible",
+          "precio": 5000,
+          "especificaciones": {
+            "cpu": "Intel Core i3",
+            "ram": "8GB",
+            "gpu": "Integrada"
+          }
+        }
+      ]
+
+
+}

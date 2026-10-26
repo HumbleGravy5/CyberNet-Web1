@@ -4,88 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Operativo</title>
-    <!-- fuentes de google -->
+    <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <!-- 1. Lógica JS -->
+    <script src="script.js"></script>
+    <!-- 2. Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body>
+
+<body x-data="panelOperativo()">
 
     <header>
         <h1>CyberNet</h1>
         <div>
             <a href="admin.html" style="color: #ffd900; margin-right: 15px;">Vista Administrador</a>
-            <a href="index.html" style="color: red;">Cerrar Sesión</a>
+            <a href="index.html" style="color: red;" @click="cerrarSesion()">Cerrar Sesión</a>
         </div>
     </header>
 
     <br>
-    
+
     <main>
-        
+
         <h2>Panel Operativo</h2>
         <hr>
 
-        <!-- Resumen de los equipos Disponibles y sesiones activas -->
+        <!-- Resumen de equipos y sesiones -->
         <div>
-            <h3>Equipos Disponibles: <span style="color: green;">11</span></h3>
-            <h3>Sesiones Activas: <span style="color: rgb(24, 47, 175);">10</span></h3>
-            <h3>Total Recaudado Hoy: $<span id="total-recaudado">0</span></h3>
+            <h3>Equipos Disponibles: <span style="color: green;" x-text="equiposDisponibles"></span></h3>
+            <h3>Sesiones Activas: <span style="color: rgb(24, 47, 175);" x-text="sesionesActivas"></span></h3>
+            <h3>Total Recaudado Hoy: $<span x-text="totalRecaudado"></span></h3>
         </div>
 
         <br>
 
         <h3>Estado de Computadores en Sala</h3>
-        
-        
-        <div class="contenedor-cajas">
-            
-            <div class="caja-pc">
-                <h4>PC 01 (General)</h4>
-                <p>Cliente: -</p>
-                <p>Tiempo: -</p>
-                <p>Estado: <span class="texto-verde">Libre</span></p>
-                <button onclick="iniciar(this)">Iniciar</button>
-            </div>
 
+        <p x-show="cargando" style="color: gray; font-style: italic;">Cargando equipos desde servicios.json...</p>
+        <p x-show="mensajeError !== ''" x-text="mensajeError" style="color: red; font-weight: bold;"></p>
 
-            <div class="caja-pc fondo-cafe" data-minutos="45">
-                <h4>PC 02 (Estudio)</h4>
-                <p>Cliente: rlNaiko</p>
-                <p>Tiempo: 45 min</p>
-                <p>Estado: Ocupado</p>
-                <button onclick="cobrar(this)">Cobrar</button>
-            </div>
+        <!-- Listado dinámico de computadores -->
+        <div class="contenedor-cajas" x-show="!cargando">
 
-            <div class="caja-pc fondo-cafe" data-minutos="75">
-                <h4>PC 03 (Estudio)</h4>
-                <p>Cliente: Dmk</p>
-                <p>Tiempo: 1 hora 15 min</p>
-                <p>Estado: Ocupado</p>
-                <button onclick="cobrar(this)">Cobrar</button>
-            </div>
+            <template x-for="pc in equipos" :key="pc.id_equipo">
 
-            <div class="caja-pc fondo-cafe" data-minutos="120">
-                <h4>PC 04 (Estudio)</h4>
-                <p>Cliente: Piru</p>
-                <p>Tiempo: 2 horas</p>
-                <p>Estado: Ocupado</p>
-                <button onclick="cobrar(this)">Cobrar</button>
-            </div>
+                <!-- Si el estado es 'Ocupado', aplica la clase 'fondo-cafe' -->
+                <div class="caja-pc" :class="{ 'fondo-cafe': pc.estado === 'Ocupado' }">
 
-            <div class="caja-pc fondo-cafe" data-minutos="15">
-                <h4>PC 05 (Estudio)</h4>
-                <p>Cliente: Drella</p>
-                <p>Tiempo: 15 min</p>
-                <p>Estado: Ocupado</p>
-                <button onclick="cobrar(this)">Cobrar</button>
-            </div>
+                    <h4><span x-text="pc.id_equipo"></span> (<span x-text="pc.tipo"></span>)</h4>
+
+                    <p>Cliente: <span x-text="pc.cliente"></span></p>
+                    <p>Tiempo: <span x-text="pc.tiempoTexto"></span></p>
+                    <p>Valor Hora: $<span x-text="pc.precio"></span></p>
+
+                    <!-- Estado: Libre (verde) u Ocupado -->
+                    <p>Estado:
+                        <span :class="{ 'texto-verde': pc.estado === 'Libre' }"
+                                style="font-weight: bold;"
+                                x-text="pc.estado">
+                        </span>
+                    </p>
+
+                    <!-- Botón único que cambia en el ciclo: Iniciar -> Cobrar -> Iniciar -->
+                    <button @click="cambiarEstado(pc)"
+                            x-text="pc.estado === 'Libre' ? 'Iniciar' : 'Cobrar'">
+                    </button>
+                </div>
+
+            </template>
 
         </div>
 
         <br><br>
-        <!-- historial clientes -->
+
+        <!-- Historial de Sesiones Finalizadas -->
         <h3 style="border-bottom: 1px solid black;">Historial de Sesiones Finalizadas</h3>
         <table border="1" style="width: 100%; text-align: left; background-color: white; border-collapse: collapse;">
             <thead style="background-color: #1a1a1a; color: white;">
@@ -97,8 +93,21 @@
                     <th style="padding: 10px;">Total Cobrado</th>
                 </tr>
             </thead>
-            <!-- JS con el id identifica el hisptorial para agregarlo -->
-            <tbody id="cuerpo-historial">
+            <tbody>
+                <template x-for="(registro, index) in historial" :key="index">
+                    <tr>
+                        <td style="padding: 8px;" x-text="registro.cliente"></td>
+                        <td style="padding: 8px;" x-text="registro.computador"></td>
+                        <td style="padding: 8px;" x-text="registro.tiempo"></td>
+                        <td style="padding: 8px;" x-text="registro.extra"></td>
+                        <td style="padding: 8px; font-weight: bold;">$<span x-text="registro.total"></span></td>
+                    </tr>
+                </template>
+                <tr x-show="historial.length === 0">
+                    <td colspan="5" style="padding: 10px; text-align: center; color: gray;">
+                        Aún no hay sesiones finalizadas hoy.
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -107,6 +116,6 @@
     <footer>
         <p>2026 CyberNet.</p>
     </footer>
-    <script src="script.js"></script>
+
 </body>
 </html>
